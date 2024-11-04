@@ -17,6 +17,8 @@ const StreamerList = styled.ul`
   list-style-type: none;
   padding: 0;
   margin: 0;
+  max-height: 250px; /* Set a fixed height for the list */
+  overflow-y: auto; /* Enable vertical scrolling */
 `;
 
 const StreamerItem = styled.li`
