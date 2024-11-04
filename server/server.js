@@ -9,17 +9,17 @@ const PORT = 3001;
 app.use(cors());
 
 const topPlayersFideIds = [
-    '1503014',  // Magnus Carlsen
-    '2020009',  // Fabiano Caruana
-    '2016192',  // Hikaru Nakamura
-    '35009192',  // Arjun Erigaisi
-    '46616543', // Gukesh D
-    '14204118', // Nodirbek Abdusattorov
-    '12573981',   // Alireza Firouzja
-    '4168119',  // Ian Nepomniachtchi
-    '8603405',  // Wei Yi
-    '5000017',  // Viswanathan Anand
-  ];
+  '1503014',  // Magnus Carlsen
+  '2020009',  // Fabiano Caruana
+  '2016192',  // Hikaru Nakamura
+  '35009192',  // Arjun Erigaisi
+  '46616543', // Gukesh D
+  '14204118', // Nodirbek Abdusattorov
+  '12573981',   // Alireza Firouzja
+  '4168119',  // Ian Nepomniachtchi
+  '8603405',  // Wei Yi
+  '5000017',  // Viswanathan Anand
+];
 
 app.get('/api/top-players', async (req, res) => {
   const invalidIds = [];

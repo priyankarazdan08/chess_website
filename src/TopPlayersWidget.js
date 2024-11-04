@@ -1,4 +1,3 @@
-// src/TopPlayersWidget.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
@@ -10,6 +9,8 @@ const WidgetContainer = styled.div`
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   color: #f0f0f0;
   max-width: 300px;
+  max-height: 400px;
+  overflow-y: auto;
 `;
 
 const Table = styled.table`
@@ -40,9 +41,13 @@ const TopPlayersWidget = () => {
     const fetchTopPlayers = async () => {
       try {
         const response = await axios.get('http://localhost:3001/api/top-players');
-        setPlayers(response.data); // Store player data in state
+        
+        console.log('Full API Response:', response);
+        console.log('Players Data:', response.data.players);
+        setPlayers(response.data.players || []);
       } catch (error) {
         console.error('Error fetching top players:', error);
+        setPlayers([]); // Fallback to empty array if error
       }
     };
 
@@ -61,13 +66,19 @@ const TopPlayersWidget = () => {
           </tr>
         </thead>
         <tbody>
-          {players.map((player, index) => (
-            <TableRow key={player.name}>
-              <TableCell>{index + 1}</TableCell>
-              <TableCell>{player.name}</TableCell>
-              <TableCell>{player.standard_elo}</TableCell>
+          {players && players.length > 0 ? (
+            players.map((player, index) => (
+              <TableRow key={index}>
+                <TableCell>{index + 1}</TableCell>
+                <TableCell>{player.name}</TableCell>
+                <TableCell>{player.standard_elo}</TableCell>
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell colSpan="3">No data available</TableCell>
             </TableRow>
-          ))}
+          )}
         </tbody>
       </Table>
     </WidgetContainer>
