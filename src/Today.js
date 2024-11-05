@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import StreamersWidget from './StreamersWidget';
 import TopPlayersWidget from './TopPlayersWidget';
+import SurveyWidget from './SurveyWidget'; // Import SurveyWidget
 import styled from 'styled-components';
 
 const TodayContainer = styled.div`
@@ -15,6 +16,12 @@ const WidgetsRow = styled.div`
   display: flex;
   gap: 20px;
   align-items: flex-start; /* Prevent vertical stretching */
+`;
+
+const StreamerAndSurveyContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 `;
 
 const Today = () => {
@@ -31,9 +38,15 @@ const Today = () => {
     <TodayContainer>
       <h2>Today’s Highlights</h2>
 
-      {/* Row of Streamers and Top Players Widgets */}
+      {/* Row of Widgets */}
       <WidgetsRow>
-        <StreamersWidget />
+        {/* Container for Streamers and Survey Widgets */}
+        <StreamerAndSurveyContainer>
+          <StreamersWidget />
+          <SurveyWidget /> {/* SurveyWidget appears below StreamersWidget */}
+        </StreamerAndSurveyContainer>
+
+        {/* Top Players Widget */}
         <TopPlayersWidget />
       </WidgetsRow>
 

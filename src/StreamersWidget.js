@@ -10,14 +10,14 @@ const WidgetContainer = styled.div`
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
   color: #f0f0f0;
   font-size: 0.9em;
-  max-width: 250px;
+  max-width: 275px;
 `;
 
 const StreamerList = styled.ul`
   list-style-type: none;
   padding: 0;
   margin: 0;
-  max-height: 250px; /* Set a fixed height for the list */
+  max-height: 210px; /* Set a fixed height for the list */
   overflow-y: auto; /* Enable vertical scrolling */
 `;
 
