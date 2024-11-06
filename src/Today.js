@@ -1,9 +1,8 @@
-// src/Today.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import StreamersWidget from './StreamersWidget';
 import TopPlayersWidget from './TopPlayersWidget';
-import SurveyWidget from './SurveyWidget'; // Import SurveyWidget
+import SurveyWidget from './SurveyWidget'; 
 import styled from 'styled-components';
 
 const TodayContainer = styled.div`

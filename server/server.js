@@ -1,4 +1,3 @@
-// server/server.js
 const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
@@ -38,7 +37,6 @@ app.get('/api/top-players', async (req, res) => {
     
     const playersData = (await Promise.all(playerDataPromises)).filter(data => data !== null);
 
-    // Include invalid IDs in the response for easy debugging
     res.json({ players: playersData, invalidIds });
   } catch (error) {
     console.error('Error fetching top players:', error.message);
