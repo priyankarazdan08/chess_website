@@ -39,6 +39,12 @@ const Button = styled.button`
   }
 `;
 
+const ChessboardWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 15px;
+`;
+
 const MoveHistory = styled.ul`
   list-style-type: none;
   padding: 0;
@@ -52,26 +58,6 @@ const Move = styled.li`
   padding: 5px;
 `;
 
-const PuzzlesDisplay = styled.div`
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-top: 20px;
-`;
-
-const PuzzlePreview = styled.div`
-  background-color: #3a3f5c;
-  border-radius: 5px;
-  padding: 15px;
-  text-align: center;
-  width: 200px;
-  cursor: pointer;
-  &:hover {
-    background-color: #5bc0be;
-  }
-`;
-
 const Preparation = ({ userId }) => {
   const [puzzles, setPuzzles] = useState([]);
   const [currentPuzzle, setCurrentPuzzle] = useState(null);
@@ -80,54 +66,103 @@ const Preparation = ({ userId }) => {
   const [moveHistory, setMoveHistory] = useState([]);
   const apiToken = 'lip_O5eYsaZZAeNPAPw2Hikt';
 
-  // Fetch multiple puzzles from Lichess
-  useEffect(() => {
-    const fetchPuzzles = async () => {
-      try {
-        const response = await axios.get('https://lichess.org/api/puzzle', {
-          headers: {
-            Authorization: `Bearer ${apiToken}`,
-          },
-        });
-
-        const puzzleList = response.data.slice(0, 50).map((puzzle) => ({
-          id: puzzle.id,
-          title: puzzle.game?.name || "Untitled Puzzle",
-          fen: puzzle.fen,
-          solution: puzzle.solution,
-        }));
-
-        setPuzzles(puzzleList);
-        loadNewPuzzle(puzzleList[0]);
-      } catch (error) {
-        console.error("Error fetching puzzles: ", error);
+  const fetchPuzzleOfTheDay = async () => {
+    try {
+      console.log("Attempting to fetch Puzzle of the Day...");
+      const response = await axios.get('https://lichess.org/api/puzzle/daily', {
+        headers: { 'Content-Type': 'application/json' },
+      });
+  
+      console.log("Full API Response:", response);
+  
+      const { game, puzzle } = response.data;
+  
+      // Log the game object to inspect its full structure
+      console.log("Game data:", game);
+  
+      // Check if FEN is provided, otherwise use a fallback FEN
+      const fen = game && game.fen ? game.fen : "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+      if (!fen) {
+        console.error("Error: FEN data is missing");
+        setStatus("Error loading puzzle: No FEN data available.");
+        return;
       }
-    };
-    fetchPuzzles();
+  
+      if (!puzzle.solution) {
+        console.error("Error: Solution data is missing");
+        setStatus("Error loading puzzle: No solution data available.");
+        return;
+      }
+  
+      console.log("Using FEN:", fen);
+      console.log("Puzzle Solution:", puzzle.solution);
+  
+      const currentPuzzle = {
+        id: puzzle.id,
+        title: "Puzzle of the Day",
+        fen: fen,
+        solution: puzzle.solution,
+      };
+  
+      setPuzzles([currentPuzzle]);
+      loadNewPuzzle(currentPuzzle);
+  
+    } catch (error) {
+      console.error("Error fetching Puzzle of the Day:", error.message);
+      setStatus("Failed to fetch puzzle. Please try again later.");
+    }
+  };
+
+  useEffect(() => {
+    fetchPuzzleOfTheDay();
   }, []);
 
-  // Set up a new puzzle on the board
   const loadNewPuzzle = (puzzle) => {
     setCurrentPuzzle(puzzle);
     const newGame = new Chess();
-    newGame.load(puzzle.fen);
+  
+    // Check FEN string for common errors
+    console.log("Loading FEN:", puzzle.fen);
+    const fenParts = puzzle.fen.split(" ");
+    if (fenParts.length < 6) {
+      console.error("Invalid FEN format:", puzzle.fen);
+      setStatus("Error loading puzzle FEN: Invalid format");
+      return;
+    }
+  
+    const isLoaded = newGame.load(puzzle.fen);
+    if (!isLoaded) {
+      console.error("Failed to load FEN:", puzzle.fen);
+      setStatus("Error loading puzzle FEN. Loading fallback position.");
+      
+      // Load a fallback FEN if the provided one is invalid
+      newGame.load("r1bqkbnr/pppppppp/n7/8/8/5N2/PPPPPPPP/RNBQKB1R w KQkq - 2 2"); // Example fallback FEN
+      setGame(newGame);
+      setMoveHistory([]);
+      return;
+    }
+    
+    // If FEN is valid, continue as usual
     setGame(newGame);
     setMoveHistory([]);
     setStatus('Try to solve the puzzle!');
   };
 
-  // Reset the current puzzle
   const resetPuzzle = () => {
     if (currentPuzzle) {
       const resetGame = new Chess();
-      resetGame.load(currentPuzzle.fen);
+      const isLoaded = resetGame.load(currentPuzzle.fen);
+      if (!isLoaded) {
+        console.error("Failed to reload FEN:", currentPuzzle.fen);
+        setStatus("Error reloading puzzle FEN");
+        return;
+      }
       setGame(resetGame);
       setMoveHistory([]);
       setStatus('Puzzle reset. Try again!');
     }
   };
 
-  // Handle move validation and board updates
   const onDrop = ({ sourceSquare, targetSquare }) => {
     const move = game.move({
       from: sourceSquare,
@@ -143,7 +178,6 @@ const Preparation = ({ userId }) => {
     setGame(new Chess(game.fen()));
     setMoveHistory([...moveHistory, move.san]);
 
-    // Check if the move matches the solution
     if (currentPuzzle.solution && currentPuzzle.solution.includes(move.san)) {
       setStatus("Correct move!");
     } else {
@@ -151,7 +185,6 @@ const Preparation = ({ userId }) => {
     }
   };
 
-  // Favorite a puzzle
   const handleFavorite = () => {
     console.log(`Puzzle "${currentPuzzle.title}" added to favorites for user ${userId}.`);
     alert(`Puzzle "${currentPuzzle.title}" added to favorites!`);
@@ -159,8 +192,8 @@ const Preparation = ({ userId }) => {
 
   return (
     <Container>
-      <Title>Preparation Page</Title>
-      <p>Personalize your puzzles based on common middle-game variants of your opening</p>
+      <Title>Preparation</Title>
+      <p>Practice your skills with the daily puzzle from LiChess</p>
 
       {currentPuzzle && (
         <PuzzleContainer>
@@ -168,17 +201,19 @@ const Preparation = ({ userId }) => {
           <p><strong>Puzzle ID:</strong> {currentPuzzle.id}</p>
           <p><strong>Status:</strong> {status}</p>
 
-          <Chessboard
-            position={game.fen()}
-            onDrop={onDrop}
-            width={400}
-            transitionDuration={300}
-          />
+          <ChessboardWrapper>
+            <Chessboard
+              position={game.fen()}
+              onDrop={onDrop}
+              width={400}
+              transitionDuration={300}
+            />
+          </ChessboardWrapper>
 
           <div style={{ marginTop: "15px" }}>
             <Button onClick={handleFavorite}>Favorite this Puzzle</Button>
             <Button onClick={resetPuzzle}>Reset Puzzle</Button>
-            <Button onClick={() => loadNewPuzzle(puzzles[Math.floor(Math.random() * puzzles.length)])}>Next Puzzle</Button>
+            <Button onClick={() => fetchPuzzleOfTheDay()}>Next Puzzle of the Day</Button>
           </div>
 
           <h3 style={{ marginTop: "20px" }}>Move History</h3>
@@ -196,16 +231,6 @@ const Preparation = ({ userId }) => {
           )}
         </PuzzleContainer>
       )}
-
-      <h3 style={{ marginTop: "20px" }}>Other Puzzles</h3>
-      <PuzzlesDisplay>
-        {puzzles.map((puzzle, index) => (
-          <PuzzlePreview key={index} onClick={() => loadNewPuzzle(puzzle)}>
-            <h4>{puzzle.title}</h4>
-            <p>Puzzle ID: {puzzle.id}</p>
-          </PuzzlePreview>
-        ))}
-      </PuzzlesDisplay>
     </Container>
   );
 };
