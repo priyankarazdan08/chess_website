@@ -255,7 +255,7 @@ const Schedule = () => {
           {is3D ? 'Switch to 2D' : 'Switch to 3D'}
         </ToggleButton>
       </ScheduleContainer>
-
+      <a href="https://lichess.org/editor" target="_blank" rel="noopener noreferrer">Read more  </a>
       <Footer>
         <p>&copy; 2024 Chess Vault. All rights reserved.</p>
       </Footer>
