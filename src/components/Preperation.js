@@ -90,9 +90,9 @@ const Preparation = ({ userId }) => {
           },
         });
 
-        const puzzleList = response.data.slice(0, 10).map((puzzle) => ({
+        const puzzleList = response.data.slice(0, 50).map((puzzle) => ({
           id: puzzle.id,
-          title: puzzle.game.name || "Untitled Puzzle",
+          title: puzzle.game?.name || "Untitled Puzzle",
           fen: puzzle.fen,
           solution: puzzle.solution,
         }));

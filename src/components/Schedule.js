@@ -239,7 +239,7 @@ const Schedule = () => {
   return (
     <AppContainer>
       <ScheduleContainer>
-        <h2>Play-Board</h2>
+        <h2>Practice Variants and Openings Here!</h2>
         {is3D ? (
           <ChessBoard3D />
         ) : (
