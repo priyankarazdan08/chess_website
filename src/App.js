@@ -3,6 +3,10 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Today from './Today';
+import News from "./News";
+import Preparation from "./Preperation";
+import Research from "./Research";
+import Schedule from "./Schedule";
 
 const AppContainer = styled.div`
   display: flex;
@@ -50,11 +54,18 @@ function App() {
       <AppContainer>
         <Sidebar>
           <Title>The Chess Vault</Title>
-          <SidebarLink to="/">News</SidebarLink>
+          <SidebarLink to="/news">News</SidebarLink>
+          <SidebarLink to="/preperation">Preperation</SidebarLink>
+          <SidebarLink to="/research">Research</SidebarLink>
+          <SidebarLink to="/schedule">Schedule</SidebarLink>
         </Sidebar>
         <MainContent>
           <Routes>
             <Route path="/" element={<Today />} />
+            <Route path="/news" element={<News />} />
+            <Route path="/preperation" element={<Preparation />} />
+            <Route path="/research" element={<Research />} />
+            <Route path="/schedule" element={<Schedule />} />
           </Routes>
         </MainContent>
       </AppContainer>
