@@ -5,8 +5,9 @@ import styled from 'styled-components';
 import Today from './Today';
 import News from "./News";
 import Preparation from "./Preperation";
-import Research from "./Research";
+import ControlsContainer from './pres/ControlsContainer'; 
 import Schedule from "./Schedule";
+import Community from "./community/CommunityLayout";
 
 const AppContainer = styled.div`
   display: flex;
@@ -58,14 +59,15 @@ function App() {
           <SidebarLink to="/preperation">Preperation</SidebarLink>
           <SidebarLink to="/research">Research</SidebarLink>
           <SidebarLink to="/schedule">Schedule</SidebarLink>
+          <SidebarLink to="/community">Community</SidebarLink>
         </Sidebar>
         <MainContent>
           <Routes>
             <Route path="/" element={<Today />} />
             <Route path="/news" element={<News />} />
             <Route path="/preperation" element={<Preparation />} />
-            <Route path="/research" element={<Research />} />
-            <Route path="/schedule" element={<Schedule />} />
+            <Route path="/research" element={<ControlsContainer />} />
+            <Route path="/pres/controls-container" element={<Schedule />} />
           </Routes>
         </MainContent>
       </AppContainer>

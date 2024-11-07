@@ -1,8 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react';
+/* import React, { useEffect, useRef, useState } from 'react';
+import Chessboard from 'chessboardjsx'; // 2D board component
+import { ChessBoard3 } from './chessboard3/chessboard3';
+ // 3D board component
+import * as THREE from 'three';
+import OrbitControls from 'path-to-three/OrbitControls'; // If you want rotation controls
 
 const Schedule = () => {
-  const boardContainer = useRef(null); // reference to board container
-  const [is3D, setIs3D] = useState(false); // state to toggle between 2D and 3D
+  const boardContainer = useRef(null);
+  const [is3D, setIs3D] = useState(false); // Toggle between 2D and 3D
 
   // Initialize the board with appropriate configuration
   useEffect(() => {
@@ -14,44 +19,44 @@ const Schedule = () => {
 
     let board;
 
-    // Set up the board when 2D or 3D is selected
-    const setUpBoard = (dimensions) => {
-      let currentPosition = 'start'; // Default start position
+    // Set up the board based on the view type (2D or 3D)
+    const setUpBoard = () => {
+      let currentPosition = 'start';
 
-      // Destroy the old board if it exists
-      if (board !== undefined) {
+      if (board) {
         currentPosition = board.position();
         board.destroy();
       }
 
-      // Adjust the board dimensions and setup based on 2D or 3D
-      if (dimensions >= 3) {
+      if (is3D) {
         // 3D configuration
         boardContainer.current.style.width = '600px';
         boardContainer.current.style.height = '450px';
         board = new ChessBoard3(boardContainer.current, sampleConfig);
+
+        // Optionally add OrbitControls for better interaction
+        const controls = new OrbitControls(new THREE.Camera(), boardContainer.current);
+        controls.enableZoom = true;
       } else {
         // 2D configuration
         boardContainer.current.style.width = '450px';
         boardContainer.current.style.height = '450px';
-        board = new ChessBoard(boardContainer.current, sampleConfig);
+        board = new Chessboard(boardContainer.current, sampleConfig);
       }
 
       board.position(currentPosition, false);
     };
 
-    // Initialize the board in 2D mode initially
-    setUpBoard(is3D ? 3 : 2);
+    setUpBoard();
 
-    // Clean up the board on component unmount
     return () => {
-      if (board !== undefined) {
+      if (board) {
         board.destroy();
       }
     };
-  }, [is3D]); // Re-run the effect when the mode changes
+  }, [is3D]);
 
-  // Toggle between 2D and 3D view
+  // Toggle between 2D and 3D views
   const toggleView = () => {
     setIs3D((prev) => !prev);
   };
@@ -68,3 +73,4 @@ const Schedule = () => {
 };
 
 export default Schedule;
+*/ 

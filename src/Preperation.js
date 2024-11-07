@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Chessboard from 'chessboardjsx';
 import axios from 'axios';
-import { db } from './firebase'; // Firebase setup file
-import { addDoc, collection } from 'firebase/firestore';
-import ReactGA from 'react-ga'; // Assuming Google Analytics is still preferred
+import ReactGA from 'react-ga'; // Google Analytics for tracking
 
 const Preparation = ({ userId }) => {
   const [puzzles, setPuzzles] = useState([]);
@@ -46,25 +44,15 @@ const Preparation = ({ userId }) => {
   }, [currentPuzzle]);
 
   // Handle puzzle favorite
-  const handleFavorite = async () => {
-    try {
-      await addDoc(collection(db, 'favorites'), {
-        userId: userId,
-        puzzleId: currentPuzzle.id,
-        title: currentPuzzle.title,
-        timestamp: new Date(),
-      });
+  const handleFavorite = () => {
+    ReactGA.event({
+      category: 'Puzzle',
+      action: 'Favorited Puzzle',
+      label: currentPuzzle.id,
+    });
 
-      ReactGA.event({
-        category: 'Puzzle',
-        action: 'Favorited Puzzle',
-        label: currentPuzzle.id,
-      });
-
-      alert(`Puzzle "${currentPuzzle.title}" added to favorites!`);
-    } catch (error) {
-      console.error("Error favoriting puzzle: ", error);
-    }
+    console.log(`Puzzle "${currentPuzzle.title}" added to favorites for user ${userId}.`);
+    alert(`Puzzle "${currentPuzzle.title}" added to favorites!`);
   };
 
   // Load a new random puzzle
