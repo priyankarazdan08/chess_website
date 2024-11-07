@@ -141,19 +141,19 @@ function Community() {
             <h4>General Discussion</h4>
             <p>Talk about chess strategy, tactics, and more.</p>
             <a href="https://www.chess.com/forum/view/general/danny-vs-the-world-danny-rensch-challenges-you" target="_blank" rel="noopener noreferrer">Read more </a>
-            <button>Enter Forum</button>
+            {/* <button>Enter Forum</button> */}
           </Forum>
           <Forum>
             <h4>Opening Theory</h4>
             <p>Discuss various chess openings with experienced players.</p>
             <a href="https://www.chess.com/forum/view/general/participate-in-a-chess-study-on-mental-preparation" target="_blank" rel="noopener noreferrer">Read more </a>
-            <button>Enter Forum</button>
+            {/* <button>Enter Forum</button> */}
           </Forum>
           <Forum>
             <h4>Chess Puzzles</h4>
             <p>Solve puzzles and improve your tactical skills.</p>
             <a href="https://www.chess.com/forum/view/general/is-1500-really-hard-to-get-in-blitz" target="_blank" rel="noopener noreferrer">Read more  </a>
-            <button>Enter Forum</button>
+            {/* <button>Enter Forum</button> */}
           </Forum>
         </ForumsGrid>
       </Section>
