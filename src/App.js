@@ -2,16 +2,11 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Today from './Today';
-<<<<<<< Updated upstream
-// import OpeningTree from './OpeningTree';
-=======
-import News from "./News";
 import Community from "./Community";
 import Preparation from "./components/Preperation";
 import Schedule from "./components/Schedule";
 import Research from "./components/Research";
 
->>>>>>> Stashed changes
 
 const AppContainer = styled.div`
   display: flex;
@@ -60,21 +55,18 @@ function App() {
         <Sidebar>
           <Title>The Chess Vault</Title>
           <SidebarLink to="/">News</SidebarLink>
-          <SidebarLink to="//">Opening Tree</SidebarLink>
+          <SidebarLink to="/preperation">Preperation</SidebarLink>
+          <SidebarLink to="/research">Research</SidebarLink>
+          <SidebarLink to="/community">Community</SidebarLink>
+          <SidebarLink to="/schedule">Schedule</SidebarLink>
         </Sidebar>
         <MainContent>
           <Routes>
-<<<<<<< Updated upstream
             <Route path="/" element={<Today />} />
-            {/* <Route path="//" element={<OpeningTree />} /> */}
-=======
-            <Route path="/today" element={<Today />} />
-            <Route path="/news" element={<News />} />
             <Route path="/preperation" element={<Preparation />} />
             <Route path="/research" element={<Research />} />
             <Route path="/community" element={<Community />} />
             <Route path="/schedule" element={<Schedule />} />
->>>>>>> Stashed changes
           </Routes>
         </MainContent>
       </AppContainer>
