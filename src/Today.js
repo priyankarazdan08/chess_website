@@ -124,7 +124,7 @@ const Today = () => {
           
           <ExtraImage src="/openingtreeimg.png" alt="Additional Chess Image" />
           <ExtraText>
-            Discover advanced chess strategies and insights and best your openings. Using <StyledLink to="//">opening tree</StyledLink>"
+            Discover advanced chess strategies and insights and best your openings. Using <StyledLink to="/schedule">Opening Tree</StyledLink>"
           </ExtraText>
         </CombinedImageAndTextContainer>
       </WidgetsRow>

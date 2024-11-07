@@ -7,6 +7,10 @@ import Preparation from "./components/Preperation";
 import Schedule from "./components/Schedule";
 import Research from "./components/Research";
 
+<<<<<<< Updated upstream
+=======
+//import OpeningTree from './OpeningTree';
+>>>>>>> Stashed changes
 
 const AppContainer = styled.div`
   display: flex;
@@ -54,7 +58,7 @@ function App() {
       <AppContainer>
         <Sidebar>
           <Title>The Chess Vault</Title>
-          <SidebarLink to="/">News</SidebarLink>
+          <SidebarLink to="/today">News</SidebarLink>
           <SidebarLink to="/preperation">Preperation</SidebarLink>
           <SidebarLink to="/research">Research</SidebarLink>
           <SidebarLink to="/community">Community</SidebarLink>
@@ -62,7 +66,11 @@ function App() {
         </Sidebar>
         <MainContent>
           <Routes>
+<<<<<<< Updated upstream
             <Route path="/" element={<Today />} />
+=======
+            <Route path="/today" element={<Today />} />
+>>>>>>> Stashed changes
             <Route path="/preperation" element={<Preparation />} />
             <Route path="/research" element={<Research />} />
             <Route path="/community" element={<Community />} />
