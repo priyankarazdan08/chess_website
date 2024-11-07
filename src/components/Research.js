@@ -96,17 +96,50 @@ const openings = [
   { name: "Sicilian Defense", moves: ["e4", "c5"] },
   { name: "French Defense", moves: ["e4", "e6"] },
   { name: "Ruy Lopez", moves: ["e4", "e5", "Nf3", "Nc6", "Bb5"] },
-  { name: "Reti", moves: ["Nf3"] },
-  // Add more openings as needed
+  { name: "Reti Opening", moves: ["Nf3"] },
+  { name: "Caro-Kann Defense", moves: ["e4", "c6"] },
+  { name: "Pirc Defense", moves: ["e4", "d6", "d4", "Nf6"] },
+  { name: "Alekhine's Defense", moves: ["e4", "Nf6"] },
+  { name: "English Opening", moves: ["c4"] },
+  { name: "King's Indian Defense", moves: ["d4", "Nf6", "c4", "g6"] },
+  { name: "Queen's Gambit", moves: ["d4", "d5", "c4"] },
+  { name: "King's Gambit", moves: ["e4", "e5", "f4"] },
+  { name: "Vienna Game", moves: ["e4", "e5", "Nc3"] },
+  { name: "Scotch Game", moves: ["e4", "e5", "Nf3", "Nc6", "d4"] },
+  { name: "Italian Game", moves: ["e4", "e5", "Nf3", "Nc6", "Bc4"] },
+  { name: "Four Knights Game", moves: ["e4", "e5", "Nf3", "Nc6", "Nc3", "Nf6"] },
+  { name: "Philidor Defense", moves: ["e4", "e5", "Nf3", "d6"] },
+  { name: "Grünfeld Defense", moves: ["d4", "Nf6", "c4", "g6", "Nc3", "d5"] },
+  { name: "Benoni Defense", moves: ["d4", "Nf6", "c4", "c5"] },
+  { name: "Nimzo-Indian Defense", moves: ["d4", "Nf6", "c4", "e6", "Nc3", "Bb4"] },
+  { name: "Dutch Defense", moves: ["d4", "f5"] },
+  { name: "Catalan Opening", moves: ["d4", "Nf6", "c4", "e6", "g3"] },
+  { name: "Bird's Opening", moves: ["f4"] },
+  { name: "Modern Defense", moves: ["e4", "g6"] },
+  { name: "London System", moves: ["d4", "d5", "Nf3", "Nf6", "Bf4"] },
+  { name: "Trompowsky Attack", moves: ["d4", "Nf6", "Bg5"] },
+  { name: "Scandinavian Defense", moves: ["e4", "d5"] },
+  { name: "King's Indian Attack", moves: ["Nf3", "d3", "g3", "Bg2", "O-O"] },
+  { name: "Closed Sicilian", moves: ["e4", "c5", "Nc3"] },
+  { name: "English Defense", moves: ["d4", "e6", "c4", "b6"] },
+  { name: "Old Indian Defense", moves: ["d4", "Nf6", "c4", "d6"] },
+  { name: "Evans Gambit", moves: ["e4", "e5", "Nf3", "Nc6", "Bc4", "b4"] },
+  { name: "Alapin Sicilian", moves: ["e4", "c5", "c3"] },
+  { name: "Smith-Morra Gambit", moves: ["e4", "c5", "d4", "cxd4", "c3"] },
+  { name: "Benko Gambit", moves: ["d4", "Nf6", "c4", "c5", "d5", "b5"] },
+  { name: "Vienna Gambit", moves: ["e4", "e5", "Nc3", "Nf6", "f4"] },
+  { name: "Latvian Gambit", moves: ["e4", "e5", "Nf3", "f5"] },
+  { name: "Petrov's Defense", moves: ["e4", "e5", "Nf3", "Nf6"] },
+  { name: "Blackmar-Diemer Gambit", moves: ["d4", "d5", "e4"] },
+  { name: "Budapest Gambit", moves: ["d4", "Nf6", "c4", "e5"] },
+  { name: "Grob's Attack", moves: ["g4"] },
+  { name: "Hungarian Defense", moves: ["e4", "e5", "Nf3", "Nc6", "Be2"] },
+  { name: "Polish Opening", moves: ["b4"] }
 ];
 
 const apiToken = 'lip_O5eYsaZZAeNPAPw2Hikt'; // Replace with your personal API token
 
-function identifyOpening(pgn) {
-  const chess = new Chess();
-  chess.load_pgn(pgn);
-  const moves = chess.history({ verbose: true }).map((move) => move.san);
-
+function identifyOpening(moves) {
   for (let opening of openings) {
     if (moves.slice(0, opening.moves.length).join(" ") === opening.moves.join(" ")) {
       return opening.name;
@@ -126,27 +159,68 @@ function Research() {
     setError(null);
     setGames([]);
     setOpeningCounts({});
-
+  
     try {
-      const gamesResponse = await axios.get(`https://lichess.org/api/games/user/${username}`, {
+      const response = await axios.get(`https://lichess.org/api/games/user/${username}`, {
         headers: {
           'Authorization': `Bearer ${apiToken}`
-        }
+        },
+        params: {
+          max: 10,
+          pgnInJson: false
+        },
+        responseType: 'text'
       });
-
-      const gamesData = gamesResponse.data;
+  
       const openingCounter = {};
-
-      const gamesWithOpenings = gamesData.map(game => {
-        const openingName = identifyOpening(game.pgn); // Assuming game data includes PGN
-        if (openingName in openingCounter) {
+      const gamesWithOpenings = [];
+  
+      // Split the response by double newlines to separate each game's PGN
+      const gamesText = response.data.split('\n\n\n').filter((game) => game.trim());
+  
+      for (const gameText of gamesText) {
+        const chess = new Chess();
+        
+        // Extract only the moves from the PGN, filter out headers and results
+        const moveText = gameText
+          .split(/\n/)
+          .filter(line => !line.startsWith("["))
+          .join(" ")
+          .replace(/\d+\./g, "") // Remove move numbers
+          .trim();
+        
+        // Split moveText into individual moves and filter out result notations
+        const moves = moveText.split(/\s+/).filter(move => !["1-0", "0-1", "1/2-1/2"].includes(move));
+  
+        moves.forEach((move) => {
+          // Check if the move is valid before applying it
+          const possibleMoves = chess.moves({ verbose: true }).map(m => m.san);
+          
+          if (possibleMoves.includes(move)) {
+            chess.move(move, { sloppy: true });
+          } else {
+            console.warn(`Skipping invalid or ambiguous move: ${move}`);
+          }
+        });
+  
+        const gameMoves = chess.history();
+        const openingName = identifyOpening(gameMoves);
+        const gameDetails = {
+          opening: openingName,
+          result: chess.header().Result,
+          date: chess.header().UTCDate,
+          pgn: gameText
+        };
+  
+        if (openingCounter[openingName]) {
           openingCounter[openingName]++;
         } else {
           openingCounter[openingName] = 1;
         }
-        return { ...game, opening: openingName };
-      });
-
+  
+        gamesWithOpenings.push(gameDetails);
+      }
+  
       setGames(gamesWithOpenings);
       setOpeningCounts(openingCounter);
     } catch (err) {
