@@ -2,11 +2,15 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Today from './Today';
+<<<<<<< Updated upstream
 import Community from "./Community";
 import Preparation from "./components/Preperation";
 import Schedule from "./components/Schedule";
 import Research from "./components/Research";
 
+=======
+//import OpeningTree from './OpeningTree';
+>>>>>>> Stashed changes
 
 const AppContainer = styled.div`
   display: flex;
@@ -62,7 +66,12 @@ function App() {
         </Sidebar>
         <MainContent>
           <Routes>
+<<<<<<< Updated upstream
             <Route path="/" element={<Today />} />
+=======
+            <Route path="/today" element={<Today />} />
+            <Route path="/news" element={<News />} />
+>>>>>>> Stashed changes
             <Route path="/preperation" element={<Preparation />} />
             <Route path="/research" element={<Research />} />
             <Route path="/community" element={<Community />} />
@@ -73,5 +82,4 @@ function App() {
     </Router>
   );
 }
-
 export default App;
