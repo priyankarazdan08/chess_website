@@ -49,7 +49,7 @@ const SurveyWidget = () => {
     "I do not use a chess platform"
   ];
 
-  const handleOptionChange = (event) => {
+  const handleOptionChange = (event) => { // js an event handler that changes whats checked depending on whats clicked
     const { value, checked } = event.target;
     if (checked) {
       setSelectedOptions([...selectedOptions, value]);
@@ -58,14 +58,14 @@ const SurveyWidget = () => {
     }
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = (event) => { // event handler if button is clicked
     event.preventDefault();
-    setIsSubmitted(true);
+    setIsSubmitted(true); 
   };
 
   return (
     <WidgetContainer>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}> {/* all code comes together here */}
         <QuestionTitle>What chess websites do you regularly use?</QuestionTitle>
         {options.map((option, index) => (
           <Option key={index}>
@@ -81,9 +81,9 @@ const SurveyWidget = () => {
             </label>
           </Option>
         ))}
-        <SubmitButton type="submit" disabled={isSubmitted}>
-          {isSubmitted ? "Submitted" : "Submit"}
-        </SubmitButton>
+        <SubmitButton type="submit" disabled={isSubmitted}> {/* sets the disable */ }
+          {isSubmitted ? "Submitted" : "Submit"} 
+        </SubmitButton> 
       </form>
     </WidgetContainer>
   );

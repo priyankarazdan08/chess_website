@@ -21,12 +21,12 @@ const topPlayersFideIds = [
 ];
 
 app.get('/api/top-players', async (req, res) => {
-  const invalidIds = [];
+  const invalidIds = []; // helped with debugging not necessary
 
   try {
     const playerDataPromises = topPlayersFideIds.map(async (fideId) => {
       try {
-        const response = await axios.get(`http://localhost:3000/player/${fideId}/info`);
+        const response = await axios.get(`http://localhost:3000/player/${fideId}/info`); // needed this get around for the github scraper api
         return response.data;
       } catch (error) {
         console.error(`Error fetching data for FIDE ID ${fideId}: ${error.message}`);

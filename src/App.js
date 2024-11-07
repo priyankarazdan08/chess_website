@@ -1,8 +1,8 @@
-// src/App.js
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Today from './Today';
+// import OpeningTree from './OpeningTree';
 
 const AppContainer = styled.div`
   display: flex;
@@ -51,10 +51,12 @@ function App() {
         <Sidebar>
           <Title>The Chess Vault</Title>
           <SidebarLink to="/">News</SidebarLink>
+          <SidebarLink to="//">Opening Tree</SidebarLink>
         </Sidebar>
         <MainContent>
           <Routes>
             <Route path="/" element={<Today />} />
+            {/* <Route path="//" element={<OpeningTree />} /> */}
           </Routes>
         </MainContent>
       </AppContainer>

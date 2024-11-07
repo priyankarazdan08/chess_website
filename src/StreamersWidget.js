@@ -1,4 +1,3 @@
-// src/StreamersWidget.js
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
@@ -33,7 +32,7 @@ const StreamerLink = styled.a`
   }
 `;
 
-const StreamersWidget = () => {
+const StreamersWidget = () => { // gets live streamers and their links
   const [liveStreamers, setLiveStreamers] = useState([]);
 
   useEffect(() => {
@@ -46,18 +45,17 @@ const StreamersWidget = () => {
         console.error('Error fetching streamers:', error);
       }
     };
-
     fetchStreamers();
   }, []);
 
   return (
-    <WidgetContainer>
+    <WidgetContainer> {/* according to data from questions most people watch gotham chess or hikaru which is why I used this specific api that prioritizes populatity over alphabetical order of streamers */}
       <h3>Live Streamers</h3>
       {liveStreamers.length > 0 ? (
         <StreamerList>
           {liveStreamers.map(streamer => (
             <StreamerItem key={streamer.username}>
-              <StreamerLink href={streamer.url} target="_blank" rel="noopener noreferrer">
+              <StreamerLink href={streamer.url} target="_blank" rel="noopener noreferrer"> {/* includes link to their stream from chess.com */}
                 {streamer.username}
               </StreamerLink>
             </StreamerItem>

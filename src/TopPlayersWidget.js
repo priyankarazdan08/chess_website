@@ -8,8 +8,6 @@ const WidgetContainer = styled.div`
   padding: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   color: #f0f0f0;
-  max-width: 300px;
-  max-height: 400px;
   overflow-y: auto;
 `;
 
@@ -32,6 +30,9 @@ const TableRow = styled.tr`
 
 const TableCell = styled.td`
   padding: 8px;
+  &:hover {
+    text-decoration: underline;
+  }
 `;
 
 const TopPlayersWidget = () => {
@@ -40,7 +41,7 @@ const TopPlayersWidget = () => {
   useEffect(() => {
     const fetchTopPlayers = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/api/top-players');
+        const response = await axios.get('http://localhost:3001/api/top-players'); // from the node server thats running
         
         console.log('Full API Response:', response);
         console.log('Players Data:', response.data.players);
